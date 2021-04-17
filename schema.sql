@@ -3,7 +3,7 @@ CREATE database employeeDB;
 
 USE employeeDB;
 
-CREATE TABLE departmart (
+CREATE TABLE department (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(30) NOT NULL UNIQUE,
 );
@@ -14,7 +14,7 @@ CREATE TABLE role (
   title VARCHAR(30) NOT NULL,
   salary DECIMAL (10,2) NOT NULL,
   department_id  INT NOT NULL,
-  FOREIGN KEY (department_id) REFERENCES departmart(id)
+  FOREIGN KEY (department_id) REFERENCES department(id)
 );
 
 
