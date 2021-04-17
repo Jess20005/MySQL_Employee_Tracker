@@ -113,9 +113,6 @@ function addDepartment() {
       connection.query(query, answer.department, (err, res) => {
         if (err) throw err;
         console.table(res);
-        // console.log(
-        //   `You have added this department: ${answer.department.toUpperCase()}.`
-        // );
         startPrompt();
       });
     });
@@ -134,7 +131,7 @@ function addRole() {
       message: "What is the salary of the new role?",
     })
     .prompt({
-      name: "departmentRole",
+      name: "departmentId",
       type: "list",
       message: "What department will the new role be in?",
     })
@@ -142,15 +139,65 @@ function addRole() {
     .then((answer) => {
       connection.query(
         `INSERT INTO role (title, salary, department_id)
-        VALUES ("${answer.roleTitle}", ${answer.salary}, ${deptID})`,
+        VALUES ("${answer.title}", ${answer.salary}, ${answer.deptment_id})`,
         (err, res) => {
           if (err) return err;
           console.table(res);
-          console.log(
-            `You have added this role: ${answer.roleTitle.toUpperCase()}.`
-          );
+          startPrompt();
         }
       );
-      role();
+    });
+}
+
+function addEmployee() {
+  inquirer
+    .prompt({
+      name: "firstName",
+      type: "input",
+      message: "What is the new employee's first name?",
+    })
+    .prompt({
+      name: "lastName",
+      type: "input",
+      message: "What is the new employee's last name?",
+    })
+    .prompt({
+      name: "roleID",
+      type: "list",
+      message: "What is the new employee's role ID?",
+    })
+    .prompt({
+      name: "managerID",
+      type: "list",
+      message: "What is the new employee's manager ID?",
+    })
+
+    .then((answer) => {
+      connection.query(
+        `INSERT INTO employee (first_name, last_name, role_id, manager_id)
+        VALUES ("${answer.first_name}", "${answer.last_name}", "${answer.role_id}" "${answer.manager_id}")`,
+        (err, res) => {
+          if (err) return err;
+          console.table(answer);
+          startPrompt();
+        }
+      );
+    });
+}
+
+function updateEmployee() {
+  inquirer
+    .prompt({
+      name: "employee",
+      type: "input",
+      message: "Which employee would you like to update?",
+    })
+    .then((answer) => {
+      const query = `"SELECT id, first_name, last_name, role_id FROM employee")`;
+      connection.query(query, (err, res) => {
+        if (err) throw err;
+        console.table(res);
+        startPrompt();
+      });
     });
 }
