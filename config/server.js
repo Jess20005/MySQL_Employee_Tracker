@@ -120,26 +120,27 @@ function addDepartment() {
 
 function addRole() {
   inquirer
-    .prompt({
-      name: "title",
-      type: "input",
-      message: "What is the title of the new role?",
-    })
-    .prompt({
-      name: "salary",
-      type: "input",
-      message: "What is the salary of the new role?",
-    })
-    .prompt({
-      name: "departmentId",
-      type: "list",
-      message: "What department will the new role be in?",
-    })
-
+    .prompt([
+      {
+        name: "title",
+        type: "input",
+        message: "What is the title of the new role?",
+      },
+      {
+        name: "salary",
+        type: "input",
+        message: "What is the salary of the new role?",
+      },
+      {
+        name: "departmentId",
+        type: "list",
+        message: "What department will the new role be in?",
+      },
+    ])
     .then((answer) => {
       connection.query(
         `INSERT INTO role (title, salary, department_id)
-        VALUES ("${answer.title}", ${answer.salary}, ${answer.deptment_id})`,
+        VALUES ("${answer.title}", ${answer.salary}, ${answer.deptmentId})`,
         (err, res) => {
           if (err) return err;
           console.table(res);
@@ -151,31 +152,33 @@ function addRole() {
 
 function addEmployee() {
   inquirer
-    .prompt({
-      name: "firstName",
-      type: "input",
-      message: "What is the new employee's first name?",
-    })
-    .prompt({
-      name: "lastName",
-      type: "input",
-      message: "What is the new employee's last name?",
-    })
-    .prompt({
-      name: "roleID",
-      type: "list",
-      message: "What is the new employee's role ID?",
-    })
-    .prompt({
-      name: "managerID",
-      type: "list",
-      message: "What is the new employee's manager ID?",
-    })
+    .prompt([
+      {
+        name: "firstName",
+        type: "input",
+        message: "What is the new employee's first name?",
+      },
+      {
+        name: "lastName",
+        type: "input",
+        message: "What is the new employee's last name?",
+      },
+      {
+        name: "roleID",
+        type: "list",
+        message: "What is the new employee's role ID?",
+      },
+      {
+        name: "managerID",
+        type: "list",
+        message: "What is the new employee's manager ID?",
+      },
+    ])
 
     .then((answer) => {
       connection.query(
         `INSERT INTO employee (first_name, last_name, role_id, manager_id)
-        VALUES ("${answer.first_name}", "${answer.last_name}", "${answer.role_id}" "${answer.manager_id}")`,
+        VALUES ("${answer.firstName}", "${answer.lastName}", "${answer.roleID}" "${answer.managerID}")`,
         (err, res) => {
           if (err) return err;
           console.table(answer);
