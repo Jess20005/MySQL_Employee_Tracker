@@ -63,7 +63,7 @@ const startPrompt = () => {
           updateEmployee();
           break;
 
-        case "Exit":
+        case "Quit":
           connection.end();
           break;
 
@@ -215,26 +215,25 @@ function addEmployee() {
 
 function updateEmployee() {
   inquirer
-    .prompt({
-      name: "employee",
-      type: "input",
-      message:
-        "Which employee would you like to update? (Select employee by ID number)",
-    })
+    .prompt([
+      {
+        type: "input",
+        message: "Which employee would you like to update?",
+        name: "updateQ"
+      },
 
-    .then((answer) => {
-      // console.log(answer);
-      connection.query(
-        {
-          sql:
-            "UPDATE employee SET id, first_name, last_name, role_id, manager_id) FROM employee",
-          timeout: 40000, // 40s
-        },
-        function (err, res, fields) {
-          if (err) return err;
-          console.table(res);
-          connection.end();
-        }
-      );
+      {
+        type: "input",
+        message: "What do you want to update to?",
+        name: "updateInfo"
+      }
+    ])
+    .then(function(answer) {
+    
+      connection.query('UPDATE employee SET role_id=? WHERE first_name= ?',[answer.updateInfo, answer.UpdateQ],function(err, res) {
+        if (err) throw err;
+        console.table(res);
+        startPrompt();
+      });
     });
 }
