@@ -4,7 +4,7 @@ This is an Employee Tracker command line applcation. Great for organizing and ha
 
 Below is a gif running through the steps of the application.
 
-![Gif of Employee Tracker]()
+![Gif of Employee Tracker](assets/EmployeeTracker.gif)
 
 Run the following command in the terminal and answer the prompted questions to view, add or update your employee information:
 
