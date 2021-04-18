@@ -109,12 +109,19 @@ function addDepartment() {
       message: "What is the name of the new department?",
     })
     .then((answer) => {
-      const query = `INSERT INTO department (name) VALUES("${department}")`;
-      connection.query(query, answer.department, (err, res) => {
-        if (err) throw err;
-        console.table(res);
-        startPrompt();
-      });
+      // console.log(answer);
+      connection.query(
+        {
+          sql: "INSERT INTO department (name) VALUES (?)",
+          timeout: 40000, // 40s
+          values: [answer.department],
+        },
+        function (err, res, fields) {
+          if (err) return err;
+          console.table(res);
+          startPrompt();
+        }
+      );
     });
 }
 
@@ -132,16 +139,24 @@ function addRole() {
         message: "What is the salary of the new role?",
       },
       {
-        name: "departmentId",
-        type: "list",
+        name: "departmentID",
+        type: "input",
         message: "What department will the new role be in?",
       },
     ])
     .then((answer) => {
+      // console.log(answer);
       connection.query(
-        `INSERT INTO role (title, salary, department_id)
-        VALUES ("${answer.title}", ${answer.salary}, ${answer.deptmentId})`,
-        (err, res) => {
+        {
+          sql: "INSERT INTO role (title, salary, department_id) VALUES (?,?,?)",
+          timeout: 40000, // 40s
+          values: [
+            answer.title,
+            parseInt(answer.salary),
+            parseInt(answer.departmentID),
+          ],
+        },
+        function (err, res, fields) {
           if (err) return err;
           console.table(res);
           startPrompt();
@@ -165,23 +180,33 @@ function addEmployee() {
       },
       {
         name: "roleID",
-        type: "list",
+        type: "input",
         message: "What is the new employee's role ID?",
       },
       {
         name: "managerID",
-        type: "list",
+        type: "input",
         message: "What is the new employee's manager ID?",
       },
     ])
 
     .then((answer) => {
+      console.log(answer);
       connection.query(
-        `INSERT INTO employee (first_name, last_name, role_id, manager_id)
-        VALUES ("${answer.firstName}", "${answer.lastName}", "${answer.roleID}" "${answer.managerID}")`,
-        (err, res) => {
+        {
+          sql:
+            "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)",
+          timeout: 40000, // 40s
+          values: [
+            answer.firstName,
+            answer.lastName,
+            parseInt(answer.roleID),
+            parseInt(answer.managerID),
+          ],
+        },
+        function (err, res, fields) {
           if (err) return err;
-          console.table(answer);
+          console.table(res);
           startPrompt();
         }
       );
@@ -193,14 +218,23 @@ function updateEmployee() {
     .prompt({
       name: "employee",
       type: "input",
-      message: "Which employee would you like to update?",
+      message:
+        "Which employee would you like to update? (Select employee by ID number)",
     })
+
     .then((answer) => {
-      const query = `"SELECT id, first_name, last_name, role_id FROM employee")`;
-      connection.query(query, (err, res) => {
-        if (err) throw err;
-        console.table(res);
-        startPrompt();
-      });
+      // console.log(answer);
+      connection.query(
+        {
+          sql:
+            "UPDATE employee SET id, first_name, last_name, role_id, manager_id) FROM employee",
+          timeout: 40000, // 40s
+        },
+        function (err, res, fields) {
+          if (err) return err;
+          console.table(res);
+          startPrompt();
+        }
+      );
     });
 }
