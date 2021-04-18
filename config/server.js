@@ -233,7 +233,7 @@ function updateEmployee() {
         function (err, res, fields) {
           if (err) return err;
           console.table(res);
-          startPrompt();
+          connection.end();
         }
       );
     });
